@@ -4,7 +4,7 @@ import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@cl
 function App() {
   return (
     <>
-    <h1>Clerk Authentication setup</h1>
+    <h1>Clerk Authentication vite fix</h1>
      <header>
       <SignedOut>
         <SignInButton mode="modal" />
