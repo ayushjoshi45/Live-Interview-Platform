@@ -22,13 +22,6 @@ app.get("/health", (req, res) => {
     res.status(200).json({ message: "This is the response from backend" });
 })
 
-app.get("/books", (req, res) => {
-    res.status(200).json({ message: "This is the response from backend for books" });
-})
-app.get("/book", (req, res) => {
-    res.status(200).json({ message: "This is the response from backend for book" });
-})
-
 app.use("/api/inngest", serve({client:inngest, functions}));
 
 
