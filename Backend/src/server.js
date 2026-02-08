@@ -26,6 +26,9 @@ if (ENV.NODE_ENV === "production") {
 
 const startServer = async () => {
     try {
+        if(!ENV.DATABASE_URI){
+            throw new Error("DATABASE_URI is not defined in enviroment variables");
+        }
         await connectDb();
         app.listen(ENV.PORT, () => {
             console.log(`Server Running on port ${ENV.PORT}`);
