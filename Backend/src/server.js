@@ -12,6 +12,9 @@ app.get("/health",(req,res)=>{
 app.get("/books",(req,res)=>{
     res.status(200).json({message:"This is the response from backend for books"});
 })
+app.get("/book",(req,res)=>{
+    res.status(200).json({message:"This is the response from backend for book"});
+})
 
 if(ENV.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname,"../Frontend/dist")));
@@ -19,6 +22,8 @@ if(ENV.NODE_ENV === "production"){
         res.sendFile(path.join(__dirname,"../Frontend", "dist", "index.html"));
     })
 }
+
+
 
 app.listen(ENV.PORT,()=>{
     console.log(`Server Running on port ${ENV.PORT}`);
