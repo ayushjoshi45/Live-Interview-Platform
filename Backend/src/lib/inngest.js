@@ -1,6 +1,7 @@
 import {Inngest} from "inngest";
 import { connectDb } from "./db.js";
 import User from "../models/User.js";
+import { deleteUserFromStream, insertUserToStream } from "./stream.js";
 
 export const inngest = new Inngest({ id: "LIVE_INTERVIEW" });
 
@@ -15,11 +16,15 @@ const syncUser=inngest.createFunction(
             const newUser=new User({
                 clerkId:id,
                 email:email_addresses[0]?.email_address,
-                name:`${first_name} ${last_name}`,
+                name:`${first_name || ""} ${last_name || ""}`,
                 profileImage:image_url,
             })
-
             await User.create(newUser);
+            await insertUserToStream({
+                id:newUser.clerkId.toString(),
+                name:newUser.name,
+                image:newUser.profileImage,
+            })
         } catch (error) {
             console.log("❌ Error connecting to database", error);
             return;
@@ -34,8 +39,8 @@ const deleteUserFromDb=inngest.createFunction(
         try {
             await connectDb();
             const {id}=event.data;
-
             await User.deleteOne({clerkId:id});
+            await deleteUserFromStream(id.toString());
         } catch (error) {
             console.log("❌ Error connecting to database", error);
             return;
