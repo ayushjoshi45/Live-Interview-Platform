@@ -11,7 +11,9 @@ const __dirname = path.resolve();
 
 
 const corsOptions={
-    origin: ENV.CLIENT_URL,
+    origin: ENV.NODE_ENV === "production" 
+        ? ENV.CLIENT_URL 
+        : "http://localhost:5173",
     credentials: true,
 }
 //middleware
