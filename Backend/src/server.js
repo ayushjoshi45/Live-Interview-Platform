@@ -5,6 +5,9 @@ import cors from 'cors';
 import { connectDb } from './lib/db.js';
 import { functions, inngest } from './lib/inngest.js';
 import { serve } from "inngest/express";
+import { clerkMiddleware } from '@clerk/express'
+import { protectRoute } from './middleware/protectRoute.js';
+import chatRouter from "./routes/chatRoutes.js"
 
 const app = express();
 const __dirname = path.resolve();
@@ -19,9 +22,16 @@ const corsOptions={
 //middleware
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(clerkMiddleware());
 
+app.use("/api/chat", chatRouter)
 app.get("/health", (req, res) => {
     res.status(200).json({ message: "This is the response from backend" });
+})
+
+
+app.get("/video-call", protectRoute, (req,res)=>{
+    return res.status(200).json({message:"This is the Protected Route"});
 })
 
 app.use("/api/inngest", serve({client:inngest, functions}));
